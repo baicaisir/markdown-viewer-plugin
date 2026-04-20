@@ -52,15 +52,17 @@ Optional system properties:
 
 ## Building from Source
 
+Requires JDK 17 and Maven 3.9+.
+
 ```bash
-./mvnw -DskipTests package
+mvn -DskipTests package
 # outputs target/markdown-viewer.hpi
 ```
 
 Local Jenkins for development:
 
 ```bash
-./mvnw hpi:run
+mvn hpi:run
 # open http://localhost:8080/jenkins
 ```
 

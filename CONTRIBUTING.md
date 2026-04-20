@@ -7,18 +7,18 @@ Thanks for considering a contribution!
 Requirements:
 
 - JDK 17
-- Maven 3.9+ (or use `./mvnw`)
+- Maven 3.9+
 
 Run a local Jenkins for manual testing:
 
 ```bash
-./mvnw hpi:run
+mvn hpi:run
 ```
 
 Run all tests:
 
 ```bash
-./mvnw verify
+mvn verify
 ```
 
 ## Commit Style

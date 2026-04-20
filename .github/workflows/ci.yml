@@ -16,7 +16,7 @@ jobs:
           java-version: '17'
           cache: maven
       - name: Build & test
-        run: ./mvnw -B -ntp verify
+        run: mvn -B -ntp verify
       - name: Upload HPI
         if: success()
         uses: actions/upload-artifact@v4
