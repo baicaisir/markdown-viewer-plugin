@@ -1,0 +1,25 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler" xmlns:t="/lib/hudson">
+    <l:layout title="${it.displayName}">
+        <st:include page="sidepanel.jelly" it="${it.run}" optional="true"/>
+        <l:main-panel>
+            <h1>${%DisplayName} — #${it.run.number}</h1>
+            <j:choose>
+                <j:when test="${empty(it.files)}">
+                    <p>${%NoFiles}</p>
+                </j:when>
+                <j:otherwise>
+                    <ul class="mdv-file-list">
+                        <j:forEach var="f" items="${it.files}">
+                            <li>
+                                <a href="show?path=${h.urlEncode(f)}">${f}</a>
+                                <span class="mdv-muted"> · </span>
+                                <a class="mdv-muted" href="raw?path=${h.urlEncode(f)}">${%Raw}</a>
+                            </li>
+                        </j:forEach>
+                    </ul>
+                </j:otherwise>
+            </j:choose>
+        </l:main-panel>
+    </l:layout>
+</j:jelly>

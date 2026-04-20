@@ -1,0 +1,5 @@
+<?jelly escape-by-default='true'?>
+<div>
+  Renders archived <code>.md</code> files inline on build, job, and dashboard pages.
+  See the plugin README for usage details.
+</div>

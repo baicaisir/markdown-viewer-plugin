@@ -1,0 +1,29 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
+    <l:layout title="${it.displayName}">
+        <st:include page="sidepanel.jelly" it="${it.job}" optional="true"/>
+        <l:main-panel>
+            <h1>${%DisplayName}</h1>
+            <j:set var="b" value="${it.referenceBuild}"/>
+            <j:if test="${b != null}">
+                <p class="mdv-muted">
+                    ${%LatestBuild}: <a href="${rootURL}/${b.url}">#${b.number}</a>
+                </p>
+            </j:if>
+            <j:choose>
+                <j:when test="${empty(it.files)}">
+                    <p>${%NoFiles}</p>
+                </j:when>
+                <j:otherwise>
+                    <ul class="mdv-file-list">
+                        <j:forEach var="f" items="${it.files}">
+                            <li>
+                                <a href="show?path=${h.urlEncode(f)}">${f}</a>
+                            </li>
+                        </j:forEach>
+                    </ul>
+                </j:otherwise>
+            </j:choose>
+        </l:main-panel>
+    </l:layout>
+</j:jelly>

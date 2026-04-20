@@ -1,0 +1,79 @@
+/* Markdown Viewer Plugin — UI glue */
+
+.mdv-article {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 16px;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    background: var(--card-background, #fff);
+}
+
+.mdv-breadcrumbs {
+    margin: 8px 0 4px;
+    font-size: 13px;
+}
+
+.mdv-path {
+    margin: 4px 0 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 14px;
+    color: var(--text-color-secondary, #57606a);
+}
+
+.mdv-muted {
+    color: var(--text-color-secondary, #57606a);
+}
+
+.mdv-file-list {
+    list-style: none;
+    padding: 0;
+}
+
+.mdv-file-list li {
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--input-border, #eaeaea);
+}
+
+.mdv-file-list a {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.mdv-dashboard td, .mdv-dashboard th {
+    padding: 6px 10px;
+}
+
+/* TOC side panel */
+.mdv-toc {
+    position: sticky;
+    top: 20px;
+    max-height: calc(100vh - 40px);
+    overflow: auto;
+    padding: 12px;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    background: var(--card-background, #fff);
+    font-size: 13px;
+}
+
+.mdv-toc h4 {
+    margin: 0 0 8px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-color-secondary, #57606a);
+}
+
+.mdv-toc ul {
+    list-style: none;
+    padding-left: 12px;
+    margin: 0;
+}
+
+/* Mermaid container */
+.markdown-body pre code.language-mermaid,
+.markdown-body pre > code.language-mermaid {
+    background: transparent;
+    display: block;
+    padding: 0;
+}

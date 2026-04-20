@@ -1,0 +1,23 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
+    <l:layout title="${request.getAttribute('path')}">
+        <st:include page="sidepanel.jelly" it="${it.job}" optional="true"/>
+        <l:main-panel>
+            <link rel="stylesheet" href="${rootURL}/plugin/markdown-viewer/vendor/github-markdown-css/github-markdown.css"/>
+            <link rel="stylesheet" href="${rootURL}/plugin/markdown-viewer/vendor/highlightjs/styles/github.min.css"/>
+            <link rel="stylesheet" href="${rootURL}/plugin/markdown-viewer/css/app.css"/>
+
+            <div class="mdv-breadcrumbs">
+                <a href=".">&#8592; ${%Back}</a>
+            </div>
+            <h2 class="mdv-path">${request.getAttribute('path')}</h2>
+            <article class="markdown-body mdv-article">
+                <j:out value="${request.getAttribute('html')}"/>
+            </article>
+
+            <script src="${rootURL}/plugin/markdown-viewer/vendor/highlightjs/highlight.min.js"></script>
+            <script src="${rootURL}/plugin/markdown-viewer/vendor/mermaid/mermaid.min.js"></script>
+            <script src="${rootURL}/plugin/markdown-viewer/js/app.js"></script>
+        </l:main-panel>
+    </l:layout>
+</j:jelly>

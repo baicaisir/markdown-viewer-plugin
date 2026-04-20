@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.jenkins-ci.plugins</groupId>
+        <artifactId>plugin</artifactId>
+        <version>4.81</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>io.jenkins.plugins</groupId>
+    <artifactId>markdown-viewer</artifactId>
+    <version>${revision}${changelist}</version>
+    <packaging>hpi</packaging>
+
+    <name>Markdown Viewer Plugin</name>
+    <description>Render archived .md files inline on Jenkins build/job/dashboard pages — no build step, no conversion.</description>
+    <url>https://github.com/baicaisir/markdown-viewer-plugin</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>baicaisir</id>
+            <name>baicaisir</name>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/baicaisir/markdown-viewer-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:baicaisir/markdown-viewer-plugin.git</developerConnection>
+        <url>https://github.com/baicaisir/markdown-viewer-plugin</url>
+        <tag>${scmTag}</tag>
+    </scm>
+
+    <properties>
+        <revision>1.0.0</revision>
+        <changelist>-SNAPSHOT</changelist>
+        <jenkins.version>2.426.3</jenkins.version>
+        <java.level>17</java.level>
+        <gitHubRepo>baicaisir/markdown-viewer-plugin</gitHubRepo>
+        <spotbugs.effort>Max</spotbugs.effort>
+        <spotbugs.threshold>Low</spotbugs.threshold>
+
+        <flexmark.version>0.64.8</flexmark.version>
+        <owasp.sanitizer.version>20240325.1</owasp.sanitizer.version>
+        <caffeine.version>2.9.3</caffeine.version>
+
+        <highlightjs.version>11.9.0</highlightjs.version>
+        <mermaid.version>10.9.0</mermaid.version>
+        <github-markdown-css.version>5.5.1</github-markdown-css.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.jenkins.tools.bom</groupId>
+                <artifactId>bom-2.426.x</artifactId>
+                <version>2745.vc7b_fe4c876fa_</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark</artifactId>
+            <version>${flexmark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-ext-tables</artifactId>
+            <version>${flexmark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-ext-gfm-tasklist</artifactId>
+            <version>${flexmark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-ext-gfm-strikethrough</artifactId>
+            <version>${flexmark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-ext-autolink</artifactId>
+            <version>${flexmark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-ext-anchorlink</artifactId>
+            <version>${flexmark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-ext-toc</artifactId>
+            <version>${flexmark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-ext-emoji</artifactId>
+            <version>${flexmark.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
+            <artifactId>owasp-java-html-sanitizer</artifactId>
+            <version>${owasp.sanitizer.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>${caffeine.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>structs</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!--
+                Download front-end vendor assets directly from jsDelivr at build time.
+                Files land in target/<finalName>/vendor/... and are packaged into the HPI,
+                served by Jenkins Stapler at /plugin/markdown-viewer/vendor/...
+            -->
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <version>1.8.1</version>
+                <executions>
+                    <execution>
+                        <id>fetch-github-markdown-css</id>
+                        <phase>process-resources</phase>
+                        <goals><goal>wget</goal></goals>
+                        <configuration>
+                            <url>https://cdn.jsdelivr.net/npm/github-markdown-css@${github-markdown-css.version}/github-markdown.css</url>
+                            <outputDirectory>${project.build.directory}/${project.build.finalName}/vendor/github-markdown-css</outputDirectory>
+                            <outputFileName>github-markdown.css</outputFileName>
+                            <skipCache>false</skipCache>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>fetch-hljs-js</id>
+                        <phase>process-resources</phase>
+                        <goals><goal>wget</goal></goals>
+                        <configuration>
+                            <url>https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@${highlightjs.version}/highlight.min.js</url>
+                            <outputDirectory>${project.build.directory}/${project.build.finalName}/vendor/highlightjs</outputDirectory>
+                            <outputFileName>highlight.min.js</outputFileName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>fetch-hljs-css-light</id>
+                        <phase>process-resources</phase>
+                        <goals><goal>wget</goal></goals>
+                        <configuration>
+                            <url>https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@${highlightjs.version}/styles/github.min.css</url>
+                            <outputDirectory>${project.build.directory}/${project.build.finalName}/vendor/highlightjs/styles</outputDirectory>
+                            <outputFileName>github.min.css</outputFileName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>fetch-mermaid</id>
+                        <phase>process-resources</phase>
+                        <goals><goal>wget</goal></goals>
+                        <configuration>
+                            <url>https://cdn.jsdelivr.net/npm/mermaid@${mermaid.version}/dist/mermaid.min.js</url>
+                            <outputDirectory>${project.build.directory}/${project.build.finalName}/vendor/mermaid</outputDirectory>
+                            <outputFileName>mermaid.min.js</outputFileName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>repo.jenkins-ci.org</id>
+            <url>https://repo.jenkins-ci.org/public/</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>repo.jenkins-ci.org</id>
+            <url>https://repo.jenkins-ci.org/public/</url>
+        </pluginRepository>
+    </pluginRepositories>
+</project>

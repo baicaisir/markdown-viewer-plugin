@@ -1,0 +1,41 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
+    <l:layout title="${%Title}">
+        <l:main-panel>
+            <link rel="stylesheet" href="${rootURL}/plugin/markdown-viewer/css/app.css"/>
+            <h1>${%Title}</h1>
+            <p class="mdv-muted">${%Intro}</p>
+
+            <j:choose>
+                <j:when test="${empty(it.entries)}">
+                    <p>${%Empty}</p>
+                </j:when>
+                <j:otherwise>
+                    <table class="pane bigtable mdv-dashboard">
+                        <thead>
+                            <tr>
+                                <th>${%Build}</th>
+                                <th>${%Path}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <j:forEach var="e" items="${it.entries}">
+                                <j:forEach var="f" items="${e.files}">
+                                    <tr>
+                                        <td>
+                                            <a href="${rootURL}/${e.job.url}">${e.job.fullDisplayName}</a>
+                                            <span class="mdv-muted">#${e.run.number}</span>
+                                        </td>
+                                        <td>
+                                            <a href="${rootURL}/${e.run.url}markdown/show?path=${h.urlEncode(f)}">${f}</a>
+                                        </td>
+                                    </tr>
+                                </j:forEach>
+                            </j:forEach>
+                        </tbody>
+                    </table>
+                </j:otherwise>
+            </j:choose>
+        </l:main-panel>
+    </l:layout>
+</j:jelly>
