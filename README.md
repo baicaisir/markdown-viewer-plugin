@@ -66,6 +66,11 @@ mvn hpi:run
 # open http://localhost:8080/jenkins
 ```
 
+## Architecture
+
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for a deep dive into the plugin's
+extension points, rendering pipeline, security model, and file layout.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
