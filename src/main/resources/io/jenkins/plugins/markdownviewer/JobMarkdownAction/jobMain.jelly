@@ -1,0 +1,46 @@
+<?jelly escape-by-default='true'?>
+<!--
+    Rendered by WorkflowJob/main.jelly (and Job/main.jelly) via the forEach
+    jobMain.jelly include. The block renders itself inline and then a tiny
+    self-contained script moves it right below Jenkins' built-in "Last
+    Successful Artifacts" table so it appears in the main-panel slot the
+    user expects (immediately under the artifact link, not below the stage
+    view).
+
+    Design notes:
+      * Uses ${it.displayName} / ${it.latestBuildLabel} instead of ${%Key},
+        because resource-bundle lookup for ${%Key} is not reliable when the
+        view is pulled in by <st:include ... it="${action}"/> from a foreign
+        package (WorkflowJob's main.jelly, here).
+      * The script only manipulates our own element (id=markdown-viewer-job-summary).
+        It does NOT observe global DOM changes nor touch other plugins' nodes.
+-->
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler">
+    <j:set var="mdFiles" value="${it.files}"/>
+    <j:if test="${mdFiles != null and mdFiles.size() > 0}">
+        <j:set var="b" value="${it.referenceBuild}"/>
+        <div id="markdown-viewer-job-summary"
+             data-mdv-job-url="${rootURL}/${it.job.url}"
+             style="margin:12px 0; padding:10px 14px; border:1px solid #d0d7de; border-left:3px solid #0969da; border-radius:6px; background:#f6f8fa; max-width:900px;">
+            <div style="display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;">
+                <a href="${rootURL}/${it.job.url}markdown/" style="font-weight:600; text-decoration:none;">
+                    ${it.displayName}
+                </a>
+                <j:if test="${b != null}">
+                    <span style="color:#57606a; font-size:12px;">
+                        ${it.latestBuildLabel}
+                        <a href="${rootURL}/${b.url}" style="color:inherit; text-decoration:none;">#${b.number}</a>
+                    </span>
+                </j:if>
+            </div>
+            <ul style="margin:6px 0 0; padding-left:20px;">
+                <j:forEach var="f" items="${mdFiles}">
+                    <li>
+                        <a href="${rootURL}/${it.job.url}markdown/show?path=${h.urlEncode(f)}">${f}</a>
+                    </li>
+                </j:forEach>
+            </ul>
+        </div>
+        <st:adjunct includes="io.jenkins.plugins.markdownviewer.JobMarkdownAction.place"/>
+    </j:if>
+</j:jelly>

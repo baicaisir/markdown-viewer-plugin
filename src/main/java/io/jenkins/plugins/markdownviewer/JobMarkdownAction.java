@@ -62,6 +62,14 @@ public class JobMarkdownAction implements Action {
         return "markdown";
     }
 
+    /** Localized label for "Latest build"; exposed so jobMain.jelly can bypass
+     *  the {@code ${%Key}} resource-bundle lookup (which is flaky when the view
+     *  is included from WorkflowJob/main.jelly via {@code <st:include ... it="..."/>}). */
+    @NonNull
+    public String getLatestBuildLabel() {
+        return Messages.Common_LatestBuild();
+    }
+
     @NonNull
     public List<String> getFiles() {
         Run<?, ?> b = getReferenceBuild();
